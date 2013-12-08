@@ -21,7 +21,11 @@ Installation
 Usage
 -----
 
-Create .sendman.json configuration file:
+Create a sample .sendman.json configuration file:
+
+    sendman init
+
+Configuration file contains:
 
     {
       "protocol": "ftp",
@@ -34,7 +38,7 @@ Create .sendman.json configuration file:
       "parallel": 10
     }
 
-Send the files at local path using default .sendman.json:
+Send the files at configured local path:
 
     sendman send
 
