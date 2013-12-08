@@ -1,0 +1,19 @@
+{
+  "commands": {
+    "init": {
+      "desc": "Create example .sendman.json configuration file",
+      "examples": [
+        "sendman init"
+      ]
+    },
+    "send": {
+      "desc": "Send file(s)",
+      "options": [
+        { "arg": "-f, --file <file>", "desc": "Configuration file | default: .sendman.json" }
+      ],
+      "examples": [
+        "send --file .somesendman.json"
+      ]
+    }
+  }
+}

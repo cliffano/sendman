@@ -1,0 +1,14 @@
+- description: Command help should display help information
+  command: ../../../../../bin/sendman --help
+  exitcode: 0
+  output: 'Usage: sendman'
+
+- description: Command init should display message about creating sample configuration file
+  command: ../../../../../bin/sendman init
+  exitcode: 0
+  output: 'Creating sample configuration file: .sendman.json'
+
+- description: Command send should display error message when
+  command: ../../../../../bin/sendman send
+  exitcode: 0
+  output: 'no such file or directory ''/path/to/local/dir'''

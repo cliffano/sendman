@@ -1,0 +1,10 @@
+{
+  "protocol": "ftp",
+  "host": "somehost",
+  "port": 21,
+  "username": "someusername",
+  "password": "somepassword",
+  "local": "/path/to/local/dir",
+  "remote": "/path/to/remote/dir",
+  "parallel": 10
+}

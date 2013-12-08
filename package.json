@@ -1,0 +1,49 @@
+{
+  "name": "sendman",
+  "description": "CLI tool for sending files to a remote server",
+  "keywords": [
+    "ftp"
+  ],
+  "version": "0.0.1",
+  "homepage": "http://github.com/cliffano/sendman",
+  "author": "Cliffano Subagio <blah@cliffano.com> (http://blog.cliffano.com)",
+  "contributors": [
+    "All contributors (https://github.com/cliffano/sendman/graphs/contributors)"
+  ],
+  "main": "./lib/sendman",
+  "bin": {
+    "sendman": "./bin/sendman"
+  },
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/cliffano/sendman.git"
+  },
+  "bugs": {
+    "url": "http://github.com/cliffano/sendman/issues"
+  },
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib",
+    "test": "./test"
+  },
+  "dependencies": {
+    "bagofcli": "~0.0.8",
+    "fs.extra": "~1.2.1",
+    "ftp-deploy": "~0.4.0"
+  },
+  "devDependencies": {
+    "buster-node": "~0.7.0",
+    "referee": "~1.0.1"
+  },
+  "scripts": {},
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/cliffano/sendman/raw/master/LICENSE"
+    }
+  ]
+}
