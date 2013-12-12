@@ -70,7 +70,7 @@ buster.testCase('sendman - ftp', {
     this.mockConsole = this.mock(console);
   },
   'should set opts for ftp module': function (done) {
-    this.mockConsole.expects('log').once().withExactArgs('%s/%s (%d/%d)', 'some/path', 'somefile', 6, 10);
+    this.mockConsole.expects('log').once().withExactArgs('%s (%d/%d)', 'some/path/somefile', 6, 10);
     function on(event, cb) {
       cb({
         relativePath: 'some/path',
