@@ -2,6 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/cliffano/sendman.png?branch=master)](http://travis-ci.org/cliffano/sendman)
 [![Dependencies Status](https://david-dm.org/cliffano/sendman.png)](http://david-dm.org/cliffano/sendman)
+[![Coverage Status](https://coveralls.io/repos/cliffano/sendman/badge.png?branch=master)](https://coveralls.io/r/cliffano/sendman?branch=master)
 [![Published Version](https://badge.fury.io/js/sendman.png)](http://badge.fury.io/js/sendman)
 <br/>
 [![npm Badge](https://nodei.co/npm/sendman.png)](http://npmjs.org/package/sendman)
