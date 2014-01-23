@@ -3,6 +3,7 @@ var cli = require('bagofcli');
 var fsx = require('fs.extra');
 var FtpDeploy = require('ftp-deploy');
 var referee = require('referee');
+var scp2 = require('scp2');
 var Sendman = require('../lib/sendman');
 var assert = referee.assert;
 
@@ -62,6 +63,19 @@ buster.testCase('sendman - send', {
       assert.equals(err, undefined);
       done();
     });
+  },
+  'should send file via scp when protocol is scp': function (done) {
+    var data = { protocol: 'scp' };
+    this.mockCli.expects('lookupFile').once().withExactArgs('.sendman.json').returns(JSON.stringify(data));
+    var sendman = new Sendman();
+    sendman._scp = function (opts, cb) {
+      assert.equals(opts.protocol, 'scp');
+      cb();
+    };
+    sendman.send('.sendman.json', function (err) {
+      assert.equals(err, undefined);
+      done();
+    });
   }
 });
 
@@ -97,5 +111,17 @@ buster.testCase('sendman - ftp', {
     var opts = { protocol: 'ftp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath', ftpDeploy: ftpDeploy };
     var sendman = new Sendman();
     sendman._ftp(opts, done);
+  }
+});
+
+buster.testCase('sendman - scp', {
+  setUp: function () {
+    this.mockScp2 = this.mock(scp2);
+  },
+  'should set opts for scp module': function (done) {
+    this.mockScp2.expects('scp').once().withArgs('somelocalpath', 'admin:password@example.com:/home/admin/data/').callsArgWith(2);
+    var opts = { protocol: 'scp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath' };
+    var sendman = new Sendman();
+    sendman._scp(opts, done);
   }
 });
