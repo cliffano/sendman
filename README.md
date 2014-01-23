@@ -31,7 +31,7 @@ Configuration file contains:
     {
       "protocol": "scp",
       "host": "somehost",
-      "port": 21,
+      "port": 22,
       "username": "someusername",
       "password": "somepassword",
       "local": "/path/to/local/dir",
