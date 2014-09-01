@@ -12,7 +12,7 @@
         { "arg": "-f, --file <file>", "desc": "Configuration file | default: .sendman.json" }
       ],
       "examples": [
-        "send --file .somesendman.json"
+        "sendman send --file .somesendman.json"
       ]
     }
   }
