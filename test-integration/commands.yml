@@ -13,5 +13,5 @@
 
 - description: Command send should display error message when
   command: '{sendman} send'
-  exitcode: 0
+  exitcode: 8
   output: 'no such file or directory ''/path/to/local/dir'''
