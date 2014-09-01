@@ -28,9 +28,9 @@
     "test": "./test"
   },
   "dependencies": {
-    "bagofcli": "~0.0.8",
+    "bagofcli": "~0.1.0",
     "fs.extra": "~1.2.1",
-    "ftp-deploy": "~0.4.1",
+    "ftp-deploy": "~0.7.0",
     "scp2": "~0.1.4"
   },
   "devDependencies": {
