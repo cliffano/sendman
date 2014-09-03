@@ -10,9 +10,9 @@
 Sendman
 -------
 
-Sendman is a CLI tool for sending files to a remote server.
+Sendman is a CLI tool for sending files to a local/remote location.
 
-This is handy when you want to use a configuration file to define the remote server host, port, username, password, local path, and remote path of the files you want to send via FTP or SCP.
+This is handy when you want to use a configuration file to define the local/remote server host, port, username, password, local path, and remote path of the files you want to send via FTP, SCP, or rsync.
 
 Installation
 ------------
@@ -61,4 +61,21 @@ If .sendman.json is stored in a public SCM, it's better to store username, and p
     {
       "username": "someusername",
       "password": "somepassword"
+    }
+
+Alternatively, you can use rsync.
+
+    {
+      "protocol": "rsync",
+      "host": "somehost",
+      "local": "/path/to/local/dir",
+      "remote": "/path/to/remote/dir"
+    }
+
+You can also use rsync to send files between local paths.
+
+    {
+      "protocol": "rsync",
+      "source": "/path/to/local/dir1",
+      "destination": "/path/to/local/dir2"
     }

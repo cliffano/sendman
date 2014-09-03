@@ -3,6 +3,7 @@ var cli = require('bagofcli');
 var fsx = require('fs.extra');
 var FtpDeploy = require('ftp-deploy');
 var referee = require('referee');
+var rsyncwrapper = require('rsyncwrapper');
 var scp2 = require('scp2');
 var Sendman = require('../lib/sendman');
 var assert = referee.assert;
@@ -76,6 +77,19 @@ buster.testCase('sendman - send', {
       assert.equals(err, undefined);
       done();
     });
+  },
+  'should send file via rsync when protocol is rsync': function (done) {
+    var data = { protocol: 'rsync' };
+    this.mockCli.expects('lookupFile').once().withExactArgs('.sendman.json').returns(JSON.stringify(data));
+    var sendman = new Sendman();
+    sendman._rsync = function (opts, cb) {
+      assert.equals(opts.protocol, 'rsync');
+      cb();
+    };
+    sendman.send('.sendman.json', function (err) {
+      assert.equals(err, undefined);
+      done();
+    });
   }
 });
 
@@ -119,9 +133,32 @@ buster.testCase('sendman - scp', {
     this.mockScp2 = this.mock(scp2);
   },
   'should set opts for scp module': function (done) {
-    this.mockScp2.expects('scp').once().withArgs('somelocalpath', 'admin:password@example.com:/home/admin/data/').callsArgWith(2);
-    var opts = { protocol: 'scp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath' };
+    this.mockScp2.expects('scp').once().withArgs('somelocalpath', 'someusername:somepassword@somehost:someremotepath').callsArgWith(2);
+    var opts = { protocol: 'scp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath', username: 'someusername', password: 'somepassword' };
     var sendman = new Sendman();
     sendman._scp(opts, done);
+  }
+});
+
+buster.testCase('sendman - rsync', {
+  setUp: function () {
+    this.mockConsole = this.mock(console);
+    this.mockRsyncwrapper = this.mock(rsyncwrapper);
+  },
+  'should set opts for rsync module with source and destination properties': function (done) {
+    this.mockConsole.expects('log').once().withExactArgs('rsync some/source/path some/destination/path');
+    this.mockConsole.expects('log').once().withExactArgs('somestdout');
+    this.mockRsyncwrapper.expects('rsync').once().withArgs({ src: 'some/source/path', dest: 'some/destination/path', recursive: true }).callsArgWith(1, null, 'somestdout', null, 'rsync some/source/path some/destination/path');
+    var opts = { protocol: 'rsync', source: 'some/source/path', destination: 'some/destination/path' };
+    var sendman = new Sendman();
+    sendman._rsync(opts, done);
+  },
+  'should set opts for rsync module with local and remote properties': function (done) {
+    this.mockConsole.expects('log').once().withExactArgs('rsync somelocalpath someusername:somepassword@somehost:someremotepath');
+    this.mockConsole.expects('error').once().withExactArgs('somestderr');
+    this.mockRsyncwrapper.expects('rsync').once().withArgs({ src: 'somelocalpath', dest: 'someusername:somepassword@somehost:someremotepath', recursive: true }).callsArgWith(1, null, null, 'somestderr', 'rsync somelocalpath someusername:somepassword@somehost:someremotepath');
+    var opts = { protocol: 'rsync', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath', username: 'someusername', password: 'somepassword' };
+    var sendman = new Sendman();
+    sendman._rsync(opts, done);
   }
 });
