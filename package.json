@@ -30,7 +30,7 @@
     "test": "./test"
   },
   "dependencies": {
-    "bagofcli": "~0.1.0",
+    "bagofcli": "~0.2.0",
     "fs.extra": "~1.2.1",
     "ftp-deploy": "~0.7.0",
     "rsyncwrapper": "~0.4.1",
