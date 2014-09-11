@@ -1,5 +1,6 @@
-### 0.0.4-pre
+### 0.1.0-pre
 * Add rsync protocol support
+* Set min node engine to >= v0.10.0
 
 ### 0.0.3
 * Add SCP protocol support
