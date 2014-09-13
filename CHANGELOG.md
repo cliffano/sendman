@@ -1,4 +1,7 @@
-### 0.1.0-pre
+### 0.1.1-pre
+*
+
+### 0.1.0
 * Add rsync protocol support
 * Set min node engine to >= v0.10.0
 
