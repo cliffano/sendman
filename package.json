@@ -35,11 +35,11 @@
     "ftp-deploy": "~0.7.0",
     "proxyquire": "~1.0.1",
     "rsyncwrapper": "~0.4.1",
-    "scp2": "~0.1.4"
+    "scp2": "~0.2.0"
   },
   "devDependencies": {
     "buster-node": "~0.7.0",
-    "referee": "~1.0.1"
+    "referee": "~1.1.0"
   },
   "scripts": {},
   "engines": {

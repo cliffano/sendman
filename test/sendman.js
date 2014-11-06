@@ -11,6 +11,7 @@ var assert = referee.assert;
 
 buster.testCase('sendman - init', {
   'should copy sample couchpenter.js file to current directory when init is called': function (done) {
+    this.mock({});
     this.stub(fsx, 'copy', function (src, dest, cb) {
       assert.isTrue(src.match(/\/examples\/.sendman.json$/).length === 1);
       assert.equals(dest, '.sendman.json');

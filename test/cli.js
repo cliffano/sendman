@@ -13,6 +13,7 @@ buster.testCase('cli - exec', {
       assert.defined(actions.commands.send.action);
       done();
     };
+    this.mock({});
     this.stub(_cli, 'command', mockCommand);
     cli.exec();
   }
