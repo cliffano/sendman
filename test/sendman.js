@@ -2,6 +2,7 @@ var buster = require('buster-node');
 var cli = require('bagofcli');
 var fsx = require('fs.extra');
 var FtpDeploy = require('ftp-deploy');
+var proxyquire = require('proxyquire');
 var referee = require('referee');
 var rsyncwrapper = require('rsyncwrapper');
 var scp2 = require('scp2');
@@ -119,11 +120,14 @@ buster.testCase('sendman - ftp', {
       assert.equals(opts.remoteRoot, 'someremotepath');
       cb();
     }
-    var ftpDeploy = function () {
+
+    var mockFtpDeploy = function () {
       return { on: on, deploy: deploy };
     };
-    var opts = { protocol: 'ftp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath', ftpDeploy: ftpDeploy };
+    var Sendman = proxyquire('../lib/sendman', { 'ftp-deploy': mockFtpDeploy });
     var sendman = new Sendman();
+
+    var opts = { protocol: 'ftp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath' };
     sendman._ftp(opts, done);
   }
 });
