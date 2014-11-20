@@ -33,7 +33,7 @@
     "bagofcli": "~0.2.1",
     "fs.extra": "~1.2.1",
     "ftp-deploy": "~1.0.0",
-    "proxyquire": "~1.0.1",
+    "proxyquire": "~1.1.0",
     "rsyncwrapper": "~0.4.1",
     "scp2": "~0.2.0"
   },
