@@ -79,3 +79,8 @@ You can also use rsync to send files between local paths.
       "source": "/path/to/local/dir1",
       "destination": "/path/to/local/dir2"
     }
+
+Colophon
+--------
+
+[Developer's Guide](http://cliffano.github.io/developers_guide.html#nodejs)
