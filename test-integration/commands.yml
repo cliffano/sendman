@@ -15,4 +15,4 @@
   command: '{sendman} send'
   # exitcode: 1 (since node 0.11, uncomment this line when 0.10 is no longer supported)
   # exitcode: 8 (was on node 0.10 or older, remove this line when 0.10 is no longer supported)
-  output: 'no such file or directory ''/path/to/local/dir'''
+  output: '(/path/to/local/diris not an existing location|no such file or directory ''/path/to/local/dir'')'
