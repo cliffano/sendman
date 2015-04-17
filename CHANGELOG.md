@@ -1,5 +1,5 @@
-### 0.1.1-pre
-*
+### 0.2.0-pre
+* Rename 'file' property to 'include'
 
 ### 0.1.0
 * Add rsync protocol support

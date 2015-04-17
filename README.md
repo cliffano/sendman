@@ -12,7 +12,7 @@ Sendman
 
 Sendman is a CLI tool for sending files to a local/remote location.
 
-This is handy when you want to use a configuration file to define the local/remote server host, port, username, password, local path, and remote path of the files you want to send via FTP, SCP, or rsync.
+This is handy when you want to use a configuration file to define the local/remote server host, port, username, password, local path, and remote path of the files you want to send via FTP, SCP, or rsync. No more retyping lengthy commands one by one.
 
 Installation
 ------------
@@ -38,11 +38,11 @@ Configuration file contains:
       "remote": "/path/to/remote/dir"
     }
 
-Send the files at configured local path:
+Send the files located at `local` path to `remote` location:
 
     sendman send
 
-If .sendman.json is stored in a public SCM, it's better to store username, and password in a sub-configuration file.
+It's possible to include sub-configuration file.
 
 .sendman.json contains:
 
@@ -53,7 +53,7 @@ If .sendman.json is stored in a public SCM, it's better to store username, and p
       "local": "/path/to/local/dir",
       "remote": "/path/to/remote/dir",
       "parallel": 10,
-      "file": "/path/to/.secretSendman.json"
+      "include": "/path/to/.secretSendman.json"
     }
 
 .secretSendman.json contains:
@@ -63,7 +63,7 @@ If .sendman.json is stored in a public SCM, it's better to store username, and p
       "password": "somepassword"
     }
 
-Alternatively, you can use rsync.
+Alternatively, you can use rsync to send files to a remote host.
 
     {
       "protocol": "rsync",
@@ -72,7 +72,7 @@ Alternatively, you can use rsync.
       "remote": "/path/to/remote/dir"
     }
 
-You can also use rsync to send files between local paths.
+rsync can also be used to send files between local paths.
 
     {
       "protocol": "rsync",

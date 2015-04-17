@@ -39,7 +39,7 @@ buster.testCase('sendman - send', {
     });
   },
   'should merge sub-configuration file when specified in main configuration file': function (done) {
-    var data = { protocol: 'ftp', file: '.sub.sendman.json' };
+    var data = { protocol: 'ftp', include: '.sub.sendman.json' };
     var subData = { foo: 'bar' };
     this.mockCli.expects('lookupFile').once().withExactArgs('.sendman.json').returns(JSON.stringify(data));
     this.mockCli.expects('lookupFile').once().withExactArgs('.sub.sendman.json').returns(JSON.stringify(subData));
@@ -111,7 +111,7 @@ buster.testCase('sendman - ftp', {
     }
     function deploy(opts, cb) {
       assert.equals(opts.protocol, undefined);
-      assert.equals(opts.file, undefined);
+      assert.equals(opts.include, undefined);
       assert.equals(opts.local, undefined);
       assert.equals(opts.remote, undefined);
       assert.equals(opts.host, 'somehost');
