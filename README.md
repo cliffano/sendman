@@ -1,7 +1,7 @@
 <img align="right" src="https://raw.github.com/cliffano/sendman/master/avatar.jpg" alt="Avatar"/>
 
-[![Build Status](https://secure.travis-ci.org/cliffano/sendman.png?branch=master)](http://travis-ci.org/cliffano/sendman)
-[![Dependencies Status](https://david-dm.org/cliffano/sendman.png)](http://david-dm.org/cliffano/sendman)
+[![Build Status](https://img.shields.io/travis/cliffano/sendman.svg)](http://travis-ci.org/cliffano/sendman)
+[![Dependencies Status](https://img.shields.io/david/cliffano/sendman.svg)](http://david-dm.org/cliffano/sendman)
 [![Coverage Status](https://coveralls.io/repos/cliffano/sendman/badge.png?branch=master)](https://coveralls.io/r/cliffano/sendman?branch=master)
 [![Published Version](https://badge.fury.io/js/sendman.png)](http://badge.fury.io/js/sendman)
 <br/>
