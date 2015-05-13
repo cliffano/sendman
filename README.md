@@ -2,8 +2,8 @@
 
 [![Build Status](https://img.shields.io/travis/cliffano/sendman.svg)](http://travis-ci.org/cliffano/sendman)
 [![Dependencies Status](https://img.shields.io/david/cliffano/sendman.svg)](http://david-dm.org/cliffano/sendman)
-[![Coverage Status](https://coveralls.io/repos/cliffano/sendman/badge.png?branch=master)](https://coveralls.io/r/cliffano/sendman?branch=master)
-[![Published Version](https://badge.fury.io/js/sendman.png)](http://badge.fury.io/js/sendman)
+[![Coverage Status](https://img.shields.io/coveralls/cliffano/sendman.svg)](https://coveralls.io/r/cliffano/sendman?branch=master)
+[![Published Version](https://img.shields.io/npm/v/sendman.svg)](http://www.npmjs.com/package/sendman)
 <br/>
 [![npm Badge](https://nodei.co/npm/sendman.png)](http://npmjs.org/package/sendman)
 
