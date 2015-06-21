@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - lib/sendman.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>lib/sendman.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">66.08</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">188</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">24.97</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.16</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">var cli = require(&#039;bagofcli&#039;);
+var fsx = require(&#039;fs.extra&#039;);
+var FtpDeploy = require(&#039;ftp-deploy&#039;);
+var p = require(&#039;path&#039;);
+var rsyncwrapper = require(&#039;rsyncwrapper&#039;);
+var scp2 = require(&#039;scp2&#039;);
+var util = require(&#039;util&#039;);
+
+/**
+ * Class Sendman
+ */
+function Sendman() {
+}
+
+/**
+ * Create a sample .sendman.json setup file in current working directory.
+ *
+ * @param {Function} cb: standard cb(err, result) callback
+ */
+Sendman.prototype.init = function (cb) {
+  fsx.copy(p.join(__dirname, &#039;../examples/.sendman.json&#039;), &#039;.sendman.json&#039;, cb);
+};
+
+/**
+ * Send files with properties in a configuration file.
+ * 
+ * @param {String} file: configuration file, default: .sendman.json
+ * @param {Function} cb: standard cb(err, result) callback
+ */
+Sendman.prototype.send = function (file, cb) {
+
+  const DEFAULT_PORT = 21;
+  const MAX_UPLOADS = 10;
+
+  var opts = JSON.parse(cli.lookupFile(file));
+  
+  // merge sub-configuration file
+  if (opts.include) {
+    var moreOpts = JSON.parse(cli.lookupFile(opts.include));
+    Object.keys(moreOpts).forEach(function (key) {
+      opts[key] = moreOpts[key];
+    });
+  }
+
+  if ([&#039;ftp&#039;, &#039;scp&#039;, &#039;rsync&#039;].indexOf(opts.protocol) !== -1) {
+    this[&#039;_&#039; + opts.protocol](opts, cb);
+  } else {
+    cb(new Error(&#039;Unsupported protocol %s&#039;, opts.protocol));
+  }
+};
+
+/**
+ * Send files under a local path to a remote path via FTP.
+ * 
+ * @param {Object} opts: optional
+ *   - host: hostname
+ *   - port: port number, default: 21
+ *   - username: username
+ *   - password: password
+ *   - local: local path, which files will be deployed
+ *   - remote: remote path where to send the local files to
+ * @param {Function} cb: standard cb(err, result) callback
+ */
+Sendman.prototype._ftp = function (opts, cb) {
+
+  const DEFAULT_PORT = 21;
+  const DEFAULT_PARALLEL = 10;
+
+  // add alias properties
+  opts.localRoot = opts.local;
+  opts.remoteRoot = opts.remote;
+
+  // set defaults
+  opts.port = opts.port || DEFAULT_PORT;
+  opts.parallelUploads = opts.parallel || DEFAULT_PARALLEL;
+
+  // remove temporary properties
+  delete opts.protocol;
+  delete opts.include;
+  delete opts.local;
+  delete opts.remote;
+
+  // send file via FTP
+  var ftpDeploy = new FtpDeploy();
+  ftpDeploy.on(&#039;uploaded&#039;, function(data) {
+    console.log(&#039;%s (%d/%d)&#039;, p.join(data.relativePath, data.filename), data.transferredFileCount, data.totalFileCount);
+  });
+  ftpDeploy.deploy(opts, cb);
+};
+
+/**
+ * Send files under a local path to a remote path via SCP.
+ * 
+ * @param {Object} opts: optional
+ *   - host: hostname
+ *   - port: port number, default: 22
+ *   - username: username
+ *   - password: password
+ *   - local: local path, which files will be deployed
+ *   - remote: remote path where to send the local files to
+ * @param {Function} cb: standard cb(err, result) callback
+ */
+Sendman.prototype._scp = function (opts, cb) {
+
+  const DEFAULT_PORT = 22;
+
+  // add alias properties
+  opts.localRoot = opts.local;
+  opts.remoteRoot = opts.remote;
+
+  // set defaults
+  opts.port = opts.port || DEFAULT_PORT;
+
+  // remove temporary properties
+  delete opts.protocol;
+  delete opts.include;
+  delete opts.local;
+  delete opts.remote;
+
+  // send file via SCP
+  var remoteUrl = util.format(&#039;%s:%s@%s:%s&#039;, opts.username, opts.password, opts.host, opts.remoteRoot);
+  scp2.scp(opts.localRoot, remoteUrl, cb);
+};
+
+/**
+ * Send files under a local path to a local or remote path via rsync.
+ * Option source or destination can either be a /path/to/file or &lt;username&gt;@&lt;host&gt;:/path/to/file
+ * 
+ * @param {Object} opts: optional
+ *   - host: hostname
+ *   - username: username
+ *   - password: password
+ *   - local: local path, which files will be deployed
+ *   - remote: remote path where to send the local files to
+ *   - source: local or remote path of source file/directory to be deployed
+ *   - destination: local or remote path of destination file/directory to send to
+ * @param {Function} cb: standard cb(err, result) callback
+ */
+Sendman.prototype._rsync = function (opts, cb) {
+
+  // use remote URL construction, handy for easy switching from SCP to rsync protocol
+  if (opts.local) {
+
+    opts.src = opts.local;
+    opts.dest = util.format(&#039;%s:%s@%s:%s&#039;, opts.username, opts.password, opts.host, opts.remote);
+
+    // remove temporary properties
+    delete opts.protocol;
+    delete opts.include;
+    delete opts.local;
+    delete opts.remote;
+    delete opts.host;
+    delete opts.username;
+    delete opts.password;
+
+  // use freeform source and destination locations
+  } else {
+
+    opts.src = opts.source;
+    opts.dest = opts.destination;
+
+    // remove temporary properties
+    delete opts.protocol;
+    delete opts.source;
+    delete opts.destination;
+
+  }
+
+  opts.recursive = true;
+
+  rsyncwrapper.rsync(opts, function (err, stdout, stderr, cmd) {
+    console.log(cmd);
+    if (stdout) {
+      console.log(stdout);
+    }
+    if (stderr) {
+      console.error(stderr);
+    }
+    var result = {
+      stdout: stdout,
+      stderr: stderr,
+      cmd: cmd
+    };
+    cb(err, result);
+  });
+};
+
+module.exports = Sendman;</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
