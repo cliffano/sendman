@@ -87,8 +87,8 @@ Colophon
 
 Build reports:
 
-* [Code complexity report](http://cliffano.github.io/sendman/bob/complexity/plato/index.html)
-* [Unit tests report](http://cliffano.github.io/sendman/bob/test/buster.out)
-* [Test coverage report](http://cliffano.github.io/sendman/bob/coverage/buster-istanbul/lcov-report/lib/index.html)
-* [Integration tests report](http://cliffano.github.io/sendman/bob/test-integration/cmdt.out)
-* [API Documentation](http://cliffano.github.io/sendman/bob/doc/dox-foundation/index.html)
+* [Code complexity report](http://cliffano.github.io/sendman/complexity/plato/index.html)
+* [Unit tests report](http://cliffano.github.io/sendman/test/buster.out)
+* [Test coverage report](http://cliffano.github.io/sendman/coverage/buster-istanbul/lcov-report/lib/index.html)
+* [Integration tests report](http://cliffano.github.io/sendman/test-integration/cmdt.out)
+* [API Documentation](http://cliffano.github.io/sendman/doc/dox-foundation/index.html)
