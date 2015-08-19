@@ -101,13 +101,22 @@ buster.testCase('sendman - ftp', {
   },
   'should set opts for ftp module': function (done) {
     this.mockConsole.expects('log').once().withExactArgs('%s (%d/%d)', 'some/path/somefile', 6, 10);
+    this.mockConsole.expects('log').once().withExactArgs('%s (%s)', 'some/path/somefile', 'some error');
     function on(event, cb) {
-      cb({
-        relativePath: 'some/path',
-        filename: 'somefile',
-        transferredFileCount: 6,
-        totalFileCount: 10
-      });
+      if (event === 'uploaded') {
+        cb({
+          relativePath: 'some/path',
+          filename: 'somefile',
+          transferredFileCount: 6,
+          totalFileCount: 10
+        });
+      } else if (event === 'upload-error') {
+        cb({
+          relativePath: 'some/path',
+          filename: 'somefile',
+          err: 'some error'
+        });
+      }
     }
     function deploy(opts, cb) {
       assert.equals(opts.protocol, undefined);

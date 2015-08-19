@@ -1,5 +1,5 @@
 ### 0.2.1-pre
-*
+* Add ftp error handling
 
 ### 0.2.0
 * Rename 'file' property to 'include'
