@@ -1,4 +1,7 @@
-### 0.2.1-pre
+### 0.2.2-pre
+*
+
+### 0.2.1
 * Add ftp error handling
 
 ### 0.2.0
