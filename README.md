@@ -12,7 +12,7 @@ Sendman
 
 Sendman is a CLI tool for sending files to a local/remote location.
 
-This is handy when you want to use a configuration file to define the local/remote server host, port, username, password, local path, and remote path of the files you want to send via FTP, SCP, or rsync. No more retyping lengthy commands one by one.
+This is handy when you want to use a configuration file to define the local/remote server host, port, username, password, local path, and remote path of the files you want to send via FTP, SCP, rsync, or AWS S3. No more retyping lengthy commands one by one.
 
 Installation
 ------------
@@ -78,6 +78,18 @@ rsync can also be used to send files between local paths.
       "protocol": "rsync",
       "source": "/path/to/local/dir1",
       "destination": "/path/to/local/dir2"
+    }
+
+To send files to an AWS S3 bucket:
+
+    {
+      "protocol": "s3",
+      "local": "/path/to/local/dir",
+      "bucket": "somebucket",
+      "region": "ap-southeast-2",
+      "remote": "/path/to/bucket/prefix",
+      "accessKeyId": "someaccesskeyid",
+      "secretAccessKey": "somesecretaccesskey"
     }
 
 Colophon

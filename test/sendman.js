@@ -5,6 +5,7 @@ var FtpDeploy = require('ftp-deploy');
 var proxyquire = require('proxyquire');
 var referee = require('referee');
 var rsyncwrapper = require('rsyncwrapper');
+var s3 = require('s3');
 var scp2 = require('scp2');
 var Sendman = require('../lib/sendman');
 var assert = referee.assert;
@@ -60,6 +61,19 @@ buster.testCase('sendman - send', {
     var sendman = new Sendman();
     sendman._ftp = function (opts, cb) {
       assert.equals(opts.protocol, 'ftp');
+      cb();
+    };
+    sendman.send('.sendman.json', function (err) {
+      assert.equals(err, undefined);
+      done();
+    });
+  },
+  'should send file via AWS S3 when protocol is s3': function (done) {
+    var data = { protocol: 's3' };
+    this.mockCli.expects('lookupFile').once().withExactArgs('.sendman.json').returns(JSON.stringify(data));
+    var sendman = new Sendman();
+    sendman._s3 = function (opts, cb) {
+      assert.equals(opts.protocol, 's3');
       cb();
     };
     sendman.send('.sendman.json', function (err) {
@@ -139,6 +153,85 @@ buster.testCase('sendman - ftp', {
 
     var opts = { protocol: 'ftp', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath' };
     sendman._ftp(opts, done);
+  }
+});
+
+buster.testCase('sendman - s3', {
+  setUp: function () {
+    this.mockConsole = this.mock(console);
+    this.mockS3 = this.mock(s3);
+  },
+  'should upload objects': function (done) {
+    this.mockConsole.expects('log').once().withExactArgs('Uploading %d/%d...', 23, 88);
+    this.mockConsole.expects('log').once().withExactArgs('Deleting %d/%d...', 3, 10);
+    this.mockConsole.expects('log').once().withExactArgs('Uploaded %d/%d', 23, 88);
+    this.mockConsole.expects('log').once().withExactArgs('Deleted %d/%d', 3, 10);
+    var mockUploader = {
+      progressAmount: 23,
+      progressTotal: 88,
+      deleteAmount: 3,
+      deleteTotal: 10,
+      doneFindingFiles: false,
+      doneFindingObjects: false,
+      doneMd5: false,
+      on: function (event, cb) {
+        if (event === 'progress') {
+          cb();
+        } else if (event === 'end') {
+          cb();
+        }
+      }
+    };
+    var mockClient = {
+      uploadDir: function (params) {
+        assert.equals(params.deleteRemoved, true);
+        assert.equals(params.localDir, 'somelocalpath');
+        assert.equals(params.s3Params.Bucket, 'somebucket');
+        assert.equals(params.s3Params.Prefix, 'someremotepath');
+        return mockUploader;
+      }
+    };
+    this.mockS3.expects('createClient').once().withArgs({ s3Options: { accessKeyId: 'someaccesskeyid', secretAccessKey: 'somesecretaccesskey', region: 'ap-southeast-2' }}).returns(mockClient);
+    var opts = { bucket: 'somebucket', local: 'somelocalpath', remote: 'someremotepath', accessKeyId: 'someaccesskeyid', secretAccessKey: 'somesecretaccesskey', region: 'ap-southeast-2' };
+    var sendman = new Sendman();
+    sendman._s3(opts, done);
+  },
+  'should display expected messages at the start of the progress': function (done) {
+    this.mockConsole.expects('log').once().withExactArgs('Found %d files', 88);
+    this.mockConsole.expects('log').once().withExactArgs('Done finding objects');
+    this.mockConsole.expects('log').once().withExactArgs('Done MD5 hashing');
+    this.mockConsole.expects('log').once().withExactArgs('Uploaded %d/%d', 0, 88);
+    this.mockConsole.expects('log').once().withExactArgs('Deleted %d/%d', 0, 10);
+    var mockUploader = {
+      filesFound: 88,
+      progressAmount: 0,
+      progressTotal: 88,
+      deleteAmount: 0,
+      deleteTotal: 10,
+      doneFindingFiles: true,
+      doneFindingObjects: true,
+      doneMd5: true,
+      on: function (event, cb) {
+        if (event === 'progress') {
+          cb();
+        } else if (event === 'end') {
+          cb();
+        }
+      }
+    };
+    var mockClient = {
+      uploadDir: function (params) {
+        assert.equals(params.deleteRemoved, true);
+        assert.equals(params.localDir, 'somelocalpath');
+        assert.equals(params.s3Params.Bucket, 'somebucket');
+        assert.equals(params.s3Params.Prefix, 'someremotepath');
+        return mockUploader;
+      }
+    };
+    this.mockS3.expects('createClient').once().withArgs({ s3Options: { accessKeyId: 'someaccesskeyid', secretAccessKey: 'somesecretaccesskey', region: 'ap-southeast-2' }}).returns(mockClient);
+    var opts = { bucket: 'somebucket', local: 'somelocalpath', remote: 'someremotepath', accessKeyId: 'someaccesskeyid', secretAccessKey: 'somesecretaccesskey', region: 'ap-southeast-2' };
+    var sendman = new Sendman();
+    sendman._s3(opts, done);
   }
 });
 

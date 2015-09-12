@@ -1,5 +1,5 @@
 ### 0.2.2-pre
-*
+* Add s3 protocol support
 
 ### 0.2.1
 * Add ftp error handling
