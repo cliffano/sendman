@@ -6,7 +6,7 @@
     "rsync",
     "scp"
   ],
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "http://github.com/cliffano/sendman",
   "author": "Cliffano Subagio <blah@cliffano.com> (http://blog.cliffano.com)",
   "contributors": [
