@@ -119,8 +119,7 @@ buster.testCase('sendman - ftp', {
     function on(event, cb) {
       if (event === 'uploaded') {
         cb({
-          relativePath: 'some/path',
-          filename: 'somefile',
+          filename: 'some/path/somefile',
           transferredFileCount: 6,
           totalFileCount: 10
         });

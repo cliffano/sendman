@@ -1,5 +1,6 @@
 ### 0.2.2-pre
 * Add s3 protocol support
+* Update ftp protocol output following data structure change in ftp-deploy v1.1.0
 
 ### 0.2.1
 * Add ftp error handling
