@@ -254,16 +254,24 @@ buster.testCase('sendman - rsync', {
   'should set opts for rsync module with source and destination properties': function (done) {
     this.mockConsole.expects('log').once().withExactArgs('rsync some/source/path some/destination/path');
     this.mockConsole.expects('log').once().withExactArgs('somestdout');
-    this.mockRsyncwrapper.expects('rsync').once().withArgs({ src: 'some/source/path', dest: 'some/destination/path', recursive: true }).callsArgWith(1, null, 'somestdout', null, 'rsync some/source/path some/destination/path');
     var opts = { protocol: 'rsync', source: 'some/source/path', destination: 'some/destination/path' };
+    var mockRsyncwrapper = function (opts, cb) {
+      assert.equals(opts, { src: 'some/source/path', dest: 'some/destination/path', recursive: true });
+      cb(null, 'somestdout', null, 'rsync some/source/path some/destination/path');
+    };
+    var Sendman = proxyquire('../lib/sendman', { 'rsyncwrapper': mockRsyncwrapper });
     var sendman = new Sendman();
     sendman._rsync(opts, done);
   },
   'should set opts for rsync module with local and remote properties': function (done) {
     this.mockConsole.expects('log').once().withExactArgs('rsync somelocalpath someusername:somepassword@somehost:someremotepath');
     this.mockConsole.expects('error').once().withExactArgs('somestderr');
-    this.mockRsyncwrapper.expects('rsync').once().withArgs({ src: 'somelocalpath', dest: 'someusername:somepassword@somehost:someremotepath', recursive: true }).callsArgWith(1, null, null, 'somestderr', 'rsync somelocalpath someusername:somepassword@somehost:someremotepath');
     var opts = { protocol: 'rsync', host: 'somehost', local: 'somelocalpath', remote: 'someremotepath', username: 'someusername', password: 'somepassword' };
+    var mockRsyncwrapper = function (opts, cb) {
+      assert.equals(opts, { src: 'somelocalpath', dest: 'someusername:somepassword@somehost:someremotepath', recursive: true });
+      cb(null, null, 'somestderr', 'rsync somelocalpath someusername:somepassword@somehost:someremotepath');
+    };
+    var Sendman = proxyquire('../lib/sendman', { 'rsyncwrapper': mockRsyncwrapper });
     var sendman = new Sendman();
     sendman._rsync(opts, done);
   }
