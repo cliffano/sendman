@@ -1,8 +1,5 @@
 ### 1.0.0
-*
-
-### 0.2.3-pre
-*
+* Major version upgrade only
 
 ### 0.2.2
 * Add s3 protocol support
